@@ -1,0 +1,265 @@
+body {
+  font-family : Roboto, sans-serif;
+  font-size : 0.8rem;
+  font-weight : 400;
+  fill : #b9b9b9;
+}
+
+table{
+  font-size : 0.7rem;
+  width : 100%;
+}
+
+.borders {
+  border : 1px solid #ddd;
+}
+
+.top-border {
+  border-top : 1px solid #ddd;
+}
+.short {
+  height : 70vh;
+}
+.shorter {
+  height : 30vh;
+}
+
+.string-wrapper {
+  isolation : isolate; /* mainly to do with mix-blend-mode */
+}
+
+.string {
+  mix-blend-mode : multiply;
+}
+
+.inner-label {
+  font-family : Roboto, sans-serif;
+  font-size : 1.1rem;
+  font-weight : 400;
+  fill : #232323;
+  cursor : default;
+  text-anchor : middle;
+}
+
+.outer-label {
+  font-family : Roboto, sans-serif;
+  font-size : 1.1rem;
+  font-weight : 400;
+  fill : #5f5f5f;
+  cursor : default;
+}
+
+.outer-label-value {
+  font-size : 0.6rem;
+  fill : #5f5f5f;
+}
+
+.inactive {
+  fill : #b9b9b9;
+}
+
+*.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+tr {
+  width : 100%;
+}
+
+td {
+  vertical-align : top;
+  padding : 1px 5px 1px 5px; /*top right bottom left*/
+}
+
+hr { 
+    display: block;
+    border-color : rgba(100,100,100,1);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+}
+/*
+tr:hover{
+  background-color : rgba(200, 0,0,1);
+  color : #fff;
+}
+*/
+
+.linked{
+  background-color: rgba(200,0,0,1);
+  color : #fff
+}
+
+.full-height {
+  height : 100vh;
+  overflow-y : hidden;
+}
+
+.bold {
+  font-family : Roboto, sans-serif;
+  font-size : 1.1rem;
+  font-weight : 700;
+  fill : #000;
+  cursor : default;
+}
+
+.timestamps{
+  font-family : Roboto Mono;
+  font-weight : 400;
+  font-size : 0.7rem;
+  color : #b9b9b9;
+}
+#mainView { 
+  padding : 0;
+  overflow : hidden;
+}
+
+#main-view-header {
+  margin-left : 10px;
+  background-color : transparent;
+}
+
+#textOverview>span {
+  display : inline-block;
+  padding : 2px 8px;
+  text-align : center;
+  text-decoration : none;
+  border-radius : 8px;
+}
+
+#textOverview>span:hover{
+  font-weight : 900;
+}
+
+#textOverview>span:after {
+  display : block;
+  content : attr(title);
+  font-weight : 900;
+  height : 0;
+  overflow : hidden;
+  visibility : hidden;
+}
+
+.wcTopic {
+  font-weight :  400;
+}
+
+.wcWeight {
+  font-weight : 300;
+}
+
+.trBold {
+  font-weight : 900;
+  background-color : #666;
+  color : #fff;
+  padding-left : 2px;
+  padding-right : 2px;
+}
+
+.line {
+  stroke : rgba(123,123,123,0.5) 1px solid;
+}
+
+.speech {
+  width : 100%;
+}
+
+.descriptive-text {
+  font-size : 14px;
+  padding : 15px 25px;
+}
+
+.fixed-header{
+  position : fixed;
+  margin-left : 0px;
+  margin-top : 0px;
+  padding-top : 10px;
+  padding-bottom : 5px;
+  display : block;
+  width : 100%;
+  background-color : #fff;
+}
+
+.dummy-text{
+  margin-left : 0px;
+  margin-top : 0px;
+  padding-top : 10px;
+  padding-bottom : 5px;
+  color : transparent;
+  background-color : transparent;
+}
+
+.barSVG {
+  padding : 0;
+  margin : 0;
+  display : block;
+  float : right;
+}
+
+.bar {
+  fill : #ccc;
+  background-color : #ccc;
+  padding : 0;
+  margin : 0;
+  display : block;
+  float : right;
+}
+
+#transcriptOverview {
+  margin : 0;
+  padding : 0;
+  overflow : hidden;
+}
+
+#mcDetails {
+  overflow-y : scroll;
+}
+
+#partDetails {
+  overflow-y : scroll;
+}
+
+#tooltip {
+  position: absolute;
+  font-size : 0.7rem;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  background-color: rgba(30, 30, 30, 1);
+  color : white;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index : 10;
+}
+
+#tooltip.hidden {
+  display: none;
+}
+
+/* Creates a small triangle extender for the tooltip */
+#left-arrow {
+  background-color: transparent;
+  color : black;
+  fill : black;
+  font-size : 15px;
+  pointer-events: none;
+  z-index : 10;
+  position: absolute;
+}
+
+#left-arrow.hidden {
+  display: none;
+}
+

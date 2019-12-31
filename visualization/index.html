@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>F1 Visualizations</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link
+      href='https://fonts.googleapis.com/css?family=Roboto:100, 300, 400,500,700, 900'
+      rel='stylesheet' type='text/css'>
+    <link
+      href='https://fonts.googleapis.com/css?family=Roboto+Mono:400, 700'
+      rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./css/bootstrap.min.css"
+          type="text/css">
+    <link rel="stylesheet" href="./css/index-style.css"
+          type="text/css">
+  </head>
+
+  <body>
+    <div id="tooltip" class="hidden"></div>
+    <div id="left-arrow" class="hidden">&#9668;</div>
+    <div id="dirpointer" class="hidden"></div>
+    <div class="container-fluid full-height">
+
+      <div class="row">
+
+        <div class="col-md-3 full-height" id="reports">
+          <div class="descriptive-text">
+            <h2>Exploring F1 Statistics</h2>
+            <p>
+              An attempt at providing interactive visualizations for
+              historical F1 data, obtained from the
+              <a href='https://ergast.com/mrd/'>
+                Ergsat developer API.
+              </a>
+              This dashboard is divided into <b>four panels</b>, each
+              containing interactive visualizations.
+            </p>
+            <p>
+              The first panel (currently containing this text) will
+              eventually be replaced by drop-down menus that lets you
+              select the visualization you want to explore.
+              These visualizations will update the second panel,
+              currently occupied by a visualization of driver rankings
+              for the latest season.
+            </p>
+            <p>
+              The third panel lists all the drivers and the fourth panel
+              lists the constructors.
+            </p>
+            <h3>Interactivity</h3>
+            <p>
+              Mouseover each driver or constructor to see how their
+              ranking has changed over the race.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-5 borders full-height" id="mainView">
+          <h4 class="fixed-header" id="main-view-header">
+           Driver Rankings
+          </h4>
+          <h4 class="dummy-text unselectable">Dummy text for padding</h4>
+        </div>
+
+        <div class="col-md-2 full-height" id="mcDetails">
+          <h4 class="fixed-header">Drivers</h4>
+          <h4 class="dummy-text unselectable">Dummy</h4>
+          <table id='machineTable'></table>
+        </div>
+
+        <div class="col-md-2 borders full-height" id="partDetails">
+          <h4 class="fixed-header">Constructors</h4>
+          <h4 class="dummy-text unselectable">Dummy</h4>
+          <table id='partsTable'></table>
+        </div>
+
+      </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+            crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+            integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+            crossorigin="anonymous">
+    </script>
+    <script src="https://d3js.org/d3.v4.min.js" type="text/javascript"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="./js/machine_viz.js" type="text/javascript"></script>
+
+  </body>
+
+</html>
