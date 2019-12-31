@@ -28,16 +28,83 @@ function plotData(err, lapTimes, driverData) {
 
   // Set up chart area
   let margin = {left: 50, right: 50, top: 50, bottom: 50};
-  const chartWidth = +d3.select('#mainView').style('width').slice(0, -2);
-  const chartHeight = +d3.select('#mainView').style('height').slice(0, -2);
+  const chartWidth = +d3.select('#mainView').style('width').slice(0, -2) -
+      margin.left - margin.right;
+  const chartHeight = +d3.select('#mainView').style('height').slice(0, -2) -
+      d3.select('#main-view-header').style('height').slice(0, -2) -
+      d3.select('#dummy-text').style('height').slice(0, -2) - margin.top -
+      margin.bottom;
   const mainSVG = d3.select('#mainView')
                       .append('svg')
                       .attr('id', 'mainChart')
                       .attr('width', chartWidth)
                       .attr('height', chartHeight);
 
+  let maxLaps =
+      getLapsForRace.reduce((a, b) => ({'lap': Math.max(a.lap, b.lap)}));
+  let maxPositions = getLapsForRace.reduce(
+      (a, b) => ({'position': Math.max(a.position, b.position)}))
+
+  let x = d3.scaleLinear().domain([0, maxLaps.lap]).range([0, chartWidth]);
+  let y = d3.scaleLinear().domain([0, maxPositions.position]).range([
+    0, chartHeight
+  ]);
+
   // Start adding graphical elements
   let g = mainSVG.append('g').attr(
       'transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  let positionLine = d3.line()
+                         .x(function(d) {
+                           return x(d.lap);
+                         })
+                         .y(function(d) {
+                           return y(d.position);
+                         });
+
+  let line = g.append('g')
+                 .append('path')
+                 .attr('stroke', '#444')
+                 .attr('fill', 'none')
+                 .attr('stroke-width', 2)
+                 .attr('d', positionLine(getLapsForDriver));
+
+  // Add driver name to line on the chart
+  g.append('text')
+      .attr('transform', 'translate(0,' + y(getLapsForDriver[0].position) + ')')
+      .attr('dy', '-0.3em')
+      .attr('dx', '1em')
+      .attr('text-anchor', 'left')
+      .text(driverLastName)
+
+  // Add Axes
+  let yAxisLeft = d3.axisLeft().scale(y);
+  let xAxisTop = d3.axisTop().scale(x);
+  let yAxisRight = d3.axisRight().scale(y);
+  let xAxisBottom = d3.axisBottom().scale(x);
+
+  g.append('g')
+      .attr('class', 'xaxis')
+      .attr('transform', 'translate(0,0)')
+      .call(xAxisTop.ticks(maxLaps.lap / 2));
+  g.append('g')
+      .attr('class', 'yaxis')
+      .attr('transform', 'translate(0,0)')
+      .call(yAxisLeft.ticks(maxPositions.position));
+
+  g.append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('x', -chartHeight / 2)  // x and y get interchanged after rotation
+      .attr('y', -margin.left / 2)
+      .style('text-anchor', 'middle')
+      .style('font-weight', '600')
+      .text('Position');
+
+  g.append('text')
+      .attr('x', chartWidth / 2)
+      .attr('y', -margin.top / 2)
+      .style('text-anchor', 'middle')
+      .style('font-weight', '600')
+      .text('Lap');
 }
 
