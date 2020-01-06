@@ -20,9 +20,7 @@ function plotData(err, lapTimes, driverData) {
   const raceId = '841';
   let getLapsForRace = lapTimes.filter(lap => lap.raceId === raceId);
 
-  // Filter lap data further by driver last name
-  let driverLastName = 'Vettel';
-
+  // Filter lap data by driver last name
   function getLapsForDriver(driverLastName) {
     return getLapsForRace.filter(lap => lap.driverLastName === driverLastName);
   }
