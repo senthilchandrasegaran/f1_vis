@@ -22,9 +22,16 @@ function plotData(err, lapTimes, driverData) {
 
   // Filter lap data further by driver last name
   let driverLastName = 'Vettel';
-  let getLapsForDriver =
-      getLapsForRace.filter(lap => lap.driverLastName === driverLastName);
-  console.log(getLapsForDriver);
+
+  function getLapsForDriver(driverLastName) {
+    return getLapsForRace.filter(lap => lap.driverLastName === driverLastName);
+  }
+
+  let listOfDriversForRace = [];
+  getLapsForRace.forEach(lap => listOfDriversForRace.push(lap.driverLastName));
+  let uniqueListOfDriversForRace = [...new Set(listOfDriversForRace)];
+  console.log(uniqueListOfDriversForRace);
+
 
   // Set up chart area
   let margin = {left: 50, right: 50, top: 50, bottom: 50};
@@ -50,32 +57,40 @@ function plotData(err, lapTimes, driverData) {
     0, chartHeight
   ]);
 
-  // Start adding graphical elements
   let g = mainSVG.append('g').attr(
       'transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  let positionLine = d3.line()
-                         .x(function(d) {
-                           return x(d.lap);
-                         })
-                         .y(function(d) {
-                           return y(d.position);
-                         });
+  // Start adding graphical elements
+  function drawDriverPosition(driver) {
+    // driver-level graphics
+    let driverLaps = getLapsForDriver(driver);
+    console.log(driverLaps);
 
-  let line = g.append('g')
-                 .append('path')
-                 .attr('stroke', '#444')
-                 .attr('fill', 'none')
-                 .attr('stroke-width', 2)
-                 .attr('d', positionLine(getLapsForDriver));
+    let positionLine = d3.line()
+                           .x(function(d) {
+                             return x(d.lap);
+                           })
+                           .y(function(d) {
+                             return y(d.position);
+                           });
 
-  // Add driver name to line on the chart
-  g.append('text')
-      .attr('transform', 'translate(0,' + y(getLapsForDriver[0].position) + ')')
-      .attr('dy', '-0.3em')
-      .attr('dx', '1em')
-      .attr('text-anchor', 'left')
-      .text(driverLastName)
+    let line = g.append('g')
+                   .append('path')
+                   .attr('stroke', '#444')
+                   .attr('fill', 'none')
+                   .attr('stroke-width', 2)
+                   .attr('d', positionLine(driverLaps));
+
+    // Add driver name to line on the chart
+    g.append('text')
+        .attr('transform', 'translate(0,' + y(driverLaps[0].position) + ')')
+        .attr('dy', '-0.3em')
+        .attr('dx', '1em')
+        .attr('text-anchor', 'left')
+        .text(driver)
+  }
+
+  uniqueListOfDriversForRace.forEach(d => drawDriverPosition(d));
 
   // Add Axes
   let yAxisLeft = d3.axisLeft().scale(y);
