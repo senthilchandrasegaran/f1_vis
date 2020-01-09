@@ -29,16 +29,19 @@ function plotData(err, lapTimes, driverData) {
   getLapsForRace.forEach(lap => listOfDriversForRace.push(lap.driverLastName));
   let uniqueListOfDriversForRace = [...new Set(listOfDriversForRace)];
   console.log(uniqueListOfDriversForRace);
+  let positionColorScale = d3.scaleSequential()
+                               .domain([uniqueListOfDriversForRace.length, 1])
+                               .interpolator(d3.interpolateGreys);
 
 
   // Set up chart area
   let margin = {left: 50, right: 50, top: 50, bottom: 50};
-  const chartWidth = +d3.select('#mainView').style('width').slice(0, -2) -
-      margin.left - margin.right;
+  const chartWidth = +d3.select('#mainView').style('width').slice(0, -2);
+  // - margin.left - margin.right;
   const chartHeight = +d3.select('#mainView').style('height').slice(0, -2) -
       d3.select('#main-view-header').style('height').slice(0, -2) -
-      d3.select('#dummy-text').style('height').slice(0, -2) - margin.top -
-      margin.bottom;
+      d3.select('#dummy-text').style('height').slice(0, -2);
+  // - margin.top - margin.bottom;
   const mainSVG = d3.select('#mainView')
                       .append('svg')
                       .attr('id', 'mainChart')
@@ -50,9 +53,11 @@ function plotData(err, lapTimes, driverData) {
   let maxPositions = getLapsForRace.reduce(
       (a, b) => ({'position': Math.max(a.position, b.position)}))
 
-  let x = d3.scaleLinear().domain([0, maxLaps.lap]).range([0, chartWidth]);
-  let y = d3.scaleLinear().domain([0, maxPositions.position]).range([
-    0, chartHeight
+  let x = d3.scaleLinear().domain([0, maxLaps.lap + 1]).range([
+    0, chartWidth - margin.left - margin.right
+  ]);
+  let y = d3.scaleLinear().domain([0.5, maxPositions.position + 0.5]).range([
+    0, chartHeight - margin.bottom - margin.top
   ]);
 
   let g = mainSVG.append('g').attr(
@@ -60,9 +65,17 @@ function plotData(err, lapTimes, driverData) {
 
   // Start adding graphical elements
   function drawDriverPosition(driver) {
+    let showOnlyStartAndEnd = false;
+    // d3.select('#togglePositionPath').property('checked');
+    let beta = showOnlyStartAndEnd ? 0.0 : 1.0;
     // driver-level graphics
     let driverLaps = getLapsForDriver(driver);
+    let driverFinishPosition = +driverLaps[driverLaps.length - 1].position;
+
     console.log(driverLaps);
+    console.log(driverFinishPosition);
+
+    let driverPositionLines = g.append('g').attr('class', 'driverPositions');
 
     let positionLine = d3.line()
                            .x(function(d) {
@@ -70,40 +83,59 @@ function plotData(err, lapTimes, driverData) {
                            })
                            .y(function(d) {
                              return y(d.position);
-                           });
+                           })
+                           .curve(d3.curveBundle.beta(beta));
 
-    let line = g.append('g')
-                   .append('path')
-                   .attr('stroke', '#444')
-                   .attr('fill', 'none')
-                   .attr('stroke-width', 2)
-                   .attr('d', positionLine(driverLaps));
+    driverPositionLines.append('g')
+        .append('path')
+        .attr('stroke', positionColorScale(driverFinishPosition))
+        .attr('fill', 'none')
+        .attr('stroke-width', 2)
+        .attr('d', positionLine(driverLaps));
 
+    let driverLabels = g.append('g').attr('class', 'driverLabels');
     // Add driver name to line on the chart
-    g.append('text')
+    driverLabels.append('text')
         .attr('transform', 'translate(0,' + y(driverLaps[0].position) + ')')
         .attr('dy', '-0.3em')
         .attr('dx', '1em')
         .attr('text-anchor', 'left')
-        .text(driver)
+        .text(driver);
   }
+
+  console.log(uniqueListOfDriversForRace);
 
   uniqueListOfDriversForRace.forEach(d => drawDriverPosition(d));
 
   // Add Axes
   let yAxisLeft = d3.axisLeft().scale(y);
-  let xAxisTop = d3.axisTop().scale(x);
   let yAxisRight = d3.axisRight().scale(y);
+  let xAxisTop = d3.axisTop().scale(x);
   let xAxisBottom = d3.axisBottom().scale(x);
 
   g.append('g')
       .attr('class', 'xaxis')
       .attr('transform', 'translate(0,0)')
       .call(xAxisTop.ticks(maxLaps.lap / 2));
+
+  g.append('g')
+      .attr('class', 'xaxis')
+      .attr(
+          'transform',
+          'translate(0,' + (chartHeight - margin.bottom - margin.top) + ')')
+      .call(xAxisBottom.ticks(maxLaps.lap / 2));
+
   g.append('g')
       .attr('class', 'yaxis')
       .attr('transform', 'translate(0,0)')
       .call(yAxisLeft.ticks(maxPositions.position));
+
+  g.append('g')
+      .attr('class', 'yaxis')
+      .attr(
+          'transform',
+          'translate(' + (chartWidth - margin.left - margin.right) + ',0)')
+      .call(yAxisRight.ticks(maxPositions.position));
 
   g.append('text')
       .attr('transform', 'rotate(-90)')
